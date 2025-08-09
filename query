@@ -87,4 +87,45 @@ having rata_rata_per_pesanan>1000000
 Tampilkan 2 produk terlaris (berdasarkan total jumlah penjualan) untuk setiap kategori produk. 
 Hasil harus menampilkan nama kategori, nama produk, total jumlah terjual, dan peringkatnya dalam kategori tersebut. 
 (Gunakan Window Function).
+SELECT nama_kategori, nama_produk, total_terjual, peringkat
+FROM (
+    SELECT kategori.nama_kategori,
+           produk.nama_produk,
+           SUM(detail_pemesanan.jumlah) AS total_terjual,
+           RANK() OVER (
+               PARTITION BY kategori.id_kategori
+               ORDER BY SUM(detail_pemesanan.jumlah) DESC
+           ) AS peringkat
+    FROM kategori
+    JOIN produk 
+        ON kategori.id_kategori = produk.id_kategori
+    JOIN detail_pemesanan 
+        ON produk.id_produk = detail_pemesanan.id_produk
+    GROUP BY kategori.id_kategori, kategori.nama_kategori, produk.id_produk, produk.nama_produk
+) AS ranked
+WHERE peringkat <= 2
+ORDER BY nama_kategori, peringkat
+
+Buat laporan yang menampilkan total nilai penjualan (bukan jumlah) untuk setiap pelanggan, dengan rincian total belanja per kategori produk dalam kolom terpisah. 
+Kolom yang harus ditampilkan adalah `nama_pelanggan`, `Total_Elektronik`, `Total_Buku`, dan `Total_Pakaian`.
+SELECT 
+    pl.nama_pelanggan,
+    SUM(CASE WHEN k.nama_kategori = 'Elektronik' THEN dp.jumlah * dp.harga_saat_transaksi ELSE 0 END) AS Total_Elektronik,
+    SUM(CASE WHEN k.nama_kategori = 'Buku' THEN dp.jumlah * dp.harga_saat_transaksi ELSE 0 END) AS Total_Buku,
+    SUM(CASE WHEN k.nama_kategori = 'Pakaian' THEN dp.jumlah * dp.harga_saat_transaksi ELSE 0 END) AS Total_Pakaian
+FROM pelanggan pl
+JOIN pemesanan pm 
+    ON pl.id_pelanggan = pm.id_pelanggan
+JOIN detail_pemesanan dp 
+    ON pm.id_pesanan = dp.id_pesanan
+JOIN produk p 
+    ON dp.id_produk = p.id_produk
+JOIN kategori k 
+    ON p.id_kategori = k.id_kategori
+GROUP BY pl.id_pelanggan, pl.nama_pelanggan
+ORDER BY pl.nama_pelanggan;
+
+
+
+
 
