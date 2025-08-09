@@ -1,0 +1,81 @@
+-- TABLE PELANGGAN 
+CREATE TABLE pelanggan (
+    id_pelanggan INT PRIMARY KEY,
+    nama_pelanggan VARCHAR(100) NOT NULL,
+    email VARCHAR(100) NOT NULL,
+    kota VARCHAR(100) NOT NULL,
+    tanggal_registrasi DATE NOT NULL
+);
+
+INSERT INTO pelanggan (id_pelanggan, nama_pelanggan, email, kota, tanggal_registrasi) VALUES
+(1, 'Budi Santoso', 'budi.s@example.com', 'Jakarta', '2024-01-15'),
+(2, 'Ani Lestari', 'ani.l@example.com', 'Bandung', '2024-02-20'),
+(3, 'Citra Dewi', 'citra.d@example.com', 'Surabaya', '2024-03-10'),
+(4, 'Doni Wijaya', 'doni.w@example.com', 'Jakarta', '2024-04-05'),
+(5, 'Eka Putri', 'eka.p@gmail.com', 'Yogyakarta', '2024-05-12');
+
+
+-- TABLE KATEGORI
+CREATE TABLE kategori (
+    id_kategori INT PRIMARY KEY,
+    nama_kategori VARCHAR(100) NOT NULL
+);
+
+INSERT INTO kategori (id_kategori, nama_kategori) VALUES
+(1, 'Elektronik'),
+(2, 'Buku'),
+(3, 'Pakaian');
+
+
+-- TABLE PRODUK
+CREATE TABLE produk (
+    id_produk INT PRIMARY KEY,
+    nama_produk VARCHAR(150) NOT NULL,
+    id_kategori INT NOT NULL,
+    harga DECIMAL(15,2) NOT NULL,
+    FOREIGN KEY (id_kategori) REFERENCES kategori(id_kategori)
+);
+
+INSERT INTO produk (id_produk, nama_produk, id_kategori, harga) VALUES
+(1, 'Laptop Pro 15', 1, 15000000),
+(2, 'Mouse Wireless', 1, 250000),
+(3, 'Novel "Laskar Pelangi"', 2, 85000),
+(4, 'Kemeja Flanel Pria', 3, 180000),
+(5, 'Buku "Dasar-Dasar Pemrograman"', 2, 120000),
+(6, 'Headphone Bluetooth', 1, 750000);
+
+-- TABLE PEMESANAN
+CREATE TABLE pemesanan (
+    id_pesanan INT PRIMARY KEY,
+    id_pelanggan INT NOT NULL,
+    tanggal_pesanan DATETIME NOT NULL,
+    status_pesanan VARCHAR(50) NOT NULL,
+    FOREIGN KEY (id_pelanggan) REFERENCES pelanggan(id_pelanggan)
+);
+
+INSERT INTO pemesanan (id_pesanan, id_pelanggan, tanggal_pesanan, status_pesanan) VALUES
+(1, 1, '2025-07-01 10:30:00', 'Selesai'),
+(2, 2, '2025-07-03 14:00:00', 'Selesai'),
+(3, 1, '2025-07-15 09:00:00', 'Diproses'),
+(4, 3, '2025-07-20 11:45:00', 'Selesai'),
+(5, 5, '2025-08-01 16:20:00', 'Diproses');
+
+-- TABLE DETAIL PEMESANAN
+CREATE TABLE detail_pemesanan (
+    id_detail INT PRIMARY KEY,
+    id_pesanan INT NOT NULL,
+    id_produk INT NOT NULL,
+    jumlah INT NOT NULL,
+    harga_saat_transaksi DECIMAL(15,2) NOT NULL,
+    FOREIGN KEY (id_pesanan) REFERENCES pemesanan(id_pesanan),
+    FOREIGN KEY (id_produk) REFERENCES produk(id_produk)
+);
+
+INSERT INTO detail_pemesanan (id_detail, id_pesanan, id_produk, jumlah, harga_saat_transaksi) VALUES
+(1, 1, 1, 1, 15000000),
+(2, 1, 2, 1, 250000),
+(3, 2, 3, 2, 85000),
+(4, 2, 5, 1, 120000),
+(5, 3, 6, 1, 750000),
+(6, 4, 4, 1, 180000),
+(7, 4, 2, 1, 250000);
