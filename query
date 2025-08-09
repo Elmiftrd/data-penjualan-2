@@ -1,0 +1,25 @@
+Tampilkan semua data dari tabel `pelanggan`
+select * from pelanggan 
+
+Tampilkan `nama_produk` dan `harga` dari tabel `produk` yang harganya di bawah Rp 500.000.
+select nama_produk,harga from produk
+where harga<500000
+
+Tampilkan `nama_pelanggan` dan `email` untuk semua pelanggan yang berasal dari kota 'Jakarta'.
+select nama_pelanggan,email FROM pelanggan
+where kota='Jakarta'
+
+Tampilkan `id_pesanan` dan `tanggal_pesanan` untuk semua pesanan yang terjadi pada bulan Juli 2025. Urutkan hasilnya dari tanggal yang paling baru.
+select id_pesanan, tanggal_pesanan from pemesanan 
+where month(tanggal_pesanan)=7
+and year(tanggal_pesanan)=2025
+order by tanggal_pesanan desc
+
+Tampilkan semua informasi produk yang termasuk dalam kategori 'Buku'.
+select * from produk
+join kategori on (produk.id_kategori=kategori.id_kategori)
+where kategori.nama_kategori='buku'
+
+Tampilkan daftar `id_pesanan`, `tanggal_pesanan`, dan `nama_pelanggan` yang melakukan pesanan tersebut.
+select pemesanan.id_pesanan, pemesanan.tanggal_pesanan, pelanggan.nama_pelanggan 
+from pemesanan join pelanggan on (pemesanan.id_pelanggan=pelanggan.id_pelanggan)
