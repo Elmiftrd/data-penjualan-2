@@ -23,3 +23,14 @@ where kategori.nama_kategori='buku'
 Tampilkan daftar `id_pesanan`, `tanggal_pesanan`, dan `nama_pelanggan` yang melakukan pesanan tersebut.
 select pemesanan.id_pesanan, pemesanan.tanggal_pesanan, pelanggan.nama_pelanggan 
 from pemesanan join pelanggan on (pemesanan.id_pelanggan=pelanggan.id_pelanggan)
+
+Tampilkan `id_pesanan`, `nama_produk`, `jumlah`, dan `harga_saat_transaksi` untuk semua item yang ada di `detail_pesanan`.
+select detail_pemesanan.id_pesanan, produk.nama_produk, detail_pemesanan.jumlah, detail_pemesanan.harga_saat_transaksi 
+from detail_pemesanan join produk on (detail_pemesanan.id_produk=produk.id_produk)
+
+Hitung dan tampilkan jumlah total produk untuk setiap `nama_kategori`. 
+Hasil harus menampilkan `nama_kategori` dan `jumlah_produk`.
+select kategori.nama_kategori, count(produk.id_produk) as 'jumlah_produk'
+from kategori join produk on (kategori.id_kategori=produk.id_kategori)
+group by kategori.nama_kategori 
+
