@@ -34,3 +34,36 @@ select kategori.nama_kategori, count(produk.id_produk) as 'jumlah_produk'
 from kategori join produk on (kategori.id_kategori=produk.id_kategori)
 group by kategori.nama_kategori 
 
+
+Hitung total uang yang telah dibelanjakan oleh setiap pelanggan. Tampilkan `nama_pelanggan` dan `total_belanja`. 
+(Asumsi: total belanja dihitung dari `jumlah * harga_saat_transaksi`).
+select pelanggan.nama_pelanggan, sum(detail_pemesanan.harga_saat_transaksi) as 'total belanja'
+from pelanggan join pemesanan (pelanggan.id_pelanggan=pemesanan.id_pelanggan) 
+join detail_pemesanan.on (pemesanan.id_pesanan=detail_pemesanan.id_pesanan)
+group by pelanggan.nama_pelanggan
+
+Tampilkan nama-nama pelanggan yang belum pernah melakukan pesanan sama sekali.
+select nama_pelangggan from pelanggan 
+where id_pelanggan not in (
+select distinct id_pelanggan from pemesanan)
+
+Temukan nama produk yang paling banyak terjual berdasarkan total `jumlah` dari semua transaksi.
+SELECT produk.nama_produk, 
+       SUM(detail_pemesanan.jumlah) AS total_terjual
+FROM produk
+JOIN detail_pemesanan 
+    ON produk.id_produk = detail_pemesanan.id_produk
+GROUP BY produk.nama_produk
+ORDER BY total_terjual desc
+limit 1;
+
+Tampilkan `id_pesanan`, `nama_pelanggan`, dan `total_nilai_pesanan` untuk pesanan yang memiliki nilai transaksi keseluruhan tertinggi.
+select detail_pemesanan.id_pesanan, pelanggan.nama_pelanggan, sum(detail_pemesanan.harga_saat_transaksi) as'total_nilai_pesanan
+from detail_pemesanan join pemesanan on (detail_pemesanan.id_pesanan=pemesanan.id_pesanan)
+join pelanggan on (pemesanan.id_pelanggan=pelanggan.id_pelanggan) 
+group by pemesanan.id_pesanan, pelanggan.nama_pelanggan
+order by total_nilai_pesanan desc 
+limit 1
+
+Untuk setiap pelanggan yang pernah memesan, tampilkan `nama_pelanggan`, 
+tanggal pesanan pertamanya (`pesanan_pertama`), dan tanggal pesanan terakhirnya (`pesanan_terakhir`).
