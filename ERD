@@ -1,0 +1,46 @@
+@startuml
+
+entity pelanggan {
+id_pelanggan : int <pk>
+nama_pelanggan : varchar (100)
+email : varchar (100)
+kota : varchar (100)
+tanggal_registrasi : date
+}
+
+entity pemesanan {
+id_pesanan : int <pk>
+id_pelanggan : int <fk>
+tanggal_pesanan : datetime
+status_pesanan : varchar (50)
+}
+
+entity kategori {
+id_kategori : int <pk>
+nama_kategori : varchar (100)
+}
+
+entity produk {
+id_produk : int <pk>
+nama produk : varchar (150)
+id_kategori : int <fk>
+harga : decimal (15,2)
+}
+
+entity detail_pemesanan{
+id_detail : int <pk>
+id_pesanan : int <fk>
+id_produk : int<pfk>
+jumlah : int
+harga_saat_transaksi : decimal (15,2)
+}
+
+pelanggan ||--o{ pemesanan :"melakukan"
+kategori ||--o{ produk : "mengelompokkan"
+pemesanan ||--o{ detail_pemesanan : "memuat"
+produk ||--o{ detail_pemesanan : "dicatat"
+
+@enduml
+
+
+
