@@ -58,7 +58,7 @@ ORDER BY total_terjual desc
 limit 1;
 
 Tampilkan `id_pesanan`, `nama_pelanggan`, dan `total_nilai_pesanan` untuk pesanan yang memiliki nilai transaksi keseluruhan tertinggi.
-select detail_pemesanan.id_pesanan, pelanggan.nama_pelanggan, sum(detail_pemesanan.harga_saat_transaksi) as'total_nilai_pesanan
+select detail_pemesanan.id_pesanan, pelanggan.nama_pelanggan, sum(detail_pemesanan.harga_saat_transaksi) as total_nilai_pesanan
 from detail_pemesanan join pemesanan on (detail_pemesanan.id_pesanan=pemesanan.id_pesanan)
 join pelanggan on (pemesanan.id_pelanggan=pelanggan.id_pelanggan) 
 group by pemesanan.id_pesanan, pelanggan.nama_pelanggan
@@ -68,13 +68,13 @@ limit 1
 Untuk setiap pelanggan yang pernah memesan, tampilkan `nama_pelanggan`, 
 tanggal pesanan pertamanya (`pesanan_pertama`), dan tanggal pesanan terakhirnya (`pesanan_terakhir`).
 select pelanggan.nama_pelanggan, min(pemesanan.tanggal_pesanan) as pesanan_pertama, 
-max(pemesanan.tanggal_pemesanan) as pesanan_terakhir from pelanggan join pemesanan (pelanggan.id_pelanggan=pemesanan.id_pelanggan)
+max(pemesanan.tanggal_pesanan) as pesanan_terakhir from pelanggan join pemesanan on (pelanggan.id_pelanggan=pemesanan.id_pelanggan)
 group by pelanggan.nama_pelanggan
 
 menampilkan semua `nama_produk` yang belum pernah ada di dalam `detail_pesanan`.
 select nama_produk from produk
 where id_produk not in (
-select distinct id_produk from detail_pemesanan
+select distinct id_produk from detail_pemesanan)
 
 Tampilkan `nama_pelanggan` dan rata-rata nilai per pesanan (`rata_rata_per_pesanan`). 
 Hanya tampilkan pelanggan yang rata-rata nilai pesanannya di atas Rp 1.000.000.
