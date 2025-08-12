@@ -38,12 +38,12 @@ group by kategori.nama_kategori
 Hitung total uang yang telah dibelanjakan oleh setiap pelanggan. Tampilkan `nama_pelanggan` dan `total_belanja`. 
 (Asumsi: total belanja dihitung dari `jumlah * harga_saat_transaksi`).
 select pelanggan.nama_pelanggan, sum(detail_pemesanan.harga_saat_transaksi) as 'total belanja'
-from pelanggan join pemesanan (pelanggan.id_pelanggan=pemesanan.id_pelanggan) 
-join detail_pemesanan.on (pemesanan.id_pesanan=detail_pemesanan.id_pesanan)
+from pelanggan join pemesanan on (pelanggan.id_pelanggan=pemesanan.id_pelanggan) 
+join detail_pemesanan on (pemesanan.id_pesanan=detail_pemesanan.id_pesanan)
 group by pelanggan.nama_pelanggan
 
 Tampilkan nama-nama pelanggan yang belum pernah melakukan pesanan sama sekali.
-select nama_pelangggan from pelanggan 
+select nama_pelanggan from pelanggan 
 where id_pelanggan not in (
 select distinct id_pelanggan from pemesanan)
 
